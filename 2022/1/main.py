@@ -8,5 +8,4 @@ for x in f:
         if max<sum:
             max = sum
         sum = 0
-
 print(max)
