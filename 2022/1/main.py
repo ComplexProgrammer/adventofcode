@@ -1,4 +1,4 @@
-f = open(r"C:\Users\User\PycharmProjects\adventofcode\2022\1\text.txt", "r")
+f = open(r"C:\Users\User\PycharmProjects\adventofcode\2022\1\text3.txt", "r")
 max = 0
 sum = 0
 for x in f:
