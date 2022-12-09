@@ -91,7 +91,8 @@ for x in f:
     arr2.append(arr1)
     arr1 = []
 
-natija1 = aniqla(np.array(arr2), 0)
+# natija1 = aniqla(np.array(arr2), 0)
+natija1 = aniqla(arr2, 0)
 natija2 = aniqla2(np.array(arr2), 0, 0)
 print(natija1)
 print(natija2)
