@@ -1,9 +1,9 @@
 import numpy as np
 
-f = open(r"text2.txt", "r")
+f = open(r"text.txt", "r")
 i = 0
 j = 0
-size = 999
+size = 700
 s = [int(size / 2) - 1, int(size / 2) - 1]
 H = [int(size / 2) - 1, int(size / 2) - 1]
 T = [int(size / 2) - 1, int(size / 2) - 1]
@@ -21,7 +21,7 @@ arr[s[0]][s[1]] = "s"
 
 
 def aniqla():
-    # print(H, T)
+    print(H, T)
     if (H[0] == T[0] or H[0] - T[0] == 1 or T[0] - H[0] == 1) and (H[1] == T[1] or H[1] - T[1] == 1 or T[1] - H[
         1] == 1):
         return False
@@ -30,6 +30,7 @@ def aniqla():
 
 
 def aniqla2(H):
+    print(H, T)
     if (H[0] == T[0] or H[0] - T[0] == 1 or T[0] - H[0] == 1) and (H[1] == T[1] or H[1] - T[1] == 1 or T[1] - H[
         1] == 1):
         return False
@@ -37,103 +38,124 @@ def aniqla2(H):
         return True
 
 
-def L(i, j, n):
+def L(i, j, n, sum):
     first = True
     H[0] = i
     H[1] = j - n
-    if arr[i][j - n] != 'T':
-        arr[i][j - n] = "H"
-    for x in range(1, n):
-        if aniqla2([i, j - n + x]):
-            arr[i][j - n + x] = "T"
-        else:
-            if first:
-                arr[i][j - n + x] = "T"
-                first = False
-            if arr[i][j - n + x] != "T":
-                arr[i][j - n + x] = "H"
-        # arr[i][j - n + x] = "T"
     if aniqla():
+        if arr[i][j - n] != 'T':
+            arr[i][j - n] = "H"
+        for x in reversed(range(1, n)):
+            if aniqla2([i, j - x]):
+                sum = sum + 1
+                arr[i][j - x] = "T"
+            else:
+                if first:
+                    if aniqla():
+                        sum = sum + 1
+                    arr[i][j - x] = "T"
+                    first = False
+                if arr[i][j - x] != "T":
+                    arr[i][j - x] = "H"
+            # arr[i][j - n + x] = "T"
         T[0] = i
         T[1] = j - n + 1
+    return sum
 
 
-def R(i, j, n):
+def R(i, j, n, sum):
     first = True
     H[0] = i
     H[1] = j + n
-    if arr[i][j + n] != 'T':
-        arr[i][j + n] = "H"
-    for x in range(1, n):
-        if aniqla2([i, j + n - x]):
-            arr[i][j + n - x] = "T"
-        else:
-            if first:
-                arr[i][j + n - x] = "T"
-                first = False
-            if arr[i][j + n - x] != 'T':
-                arr[i][j + n - x] = "H"
-        # arr[i][j + n - x] = "T"
     if aniqla():
+        if arr[i][j + n] != 'T':
+            arr[i][j + n] = "H"
+        for x in reversed(range(1, n)):
+            # arr[i][j + x] = "T"
+            if aniqla2([i, j + x]):
+                sum = sum + 1
+                arr[i][j + x] = "T"
+
+            else:
+                if first:
+                    if aniqla():
+                        sum = sum + 1
+                    arr[i][j + x] = "T"
+                    first = False
+                if arr[i][j + x] != 'T':
+                    arr[i][j + x] = "H"
+            # arr[i][j + n - x] = "T"
         T[0] = i
         T[1] = j + n - 1
+    return sum
 
 
-def U(i, j, n):
+def U(i, j, n, sum):
     first = True
     H[0] = i - n
     H[1] = j
-    if arr[i - n][j] != 'T':
-        arr[i - n][j] = "H"
-    for x in range(1, n):
-        if aniqla2([i - n + x, j]):
-            arr[i - n + x][j] = "T"
-        else:
-            if first:
-                arr[i - n + x][j] = "T"
-                first = False
-            if arr[i - n + x][j] != 'T':
-                arr[i - n + x][j] = "H"
-        # arr[i - n + x][j] = "T"
     if aniqla():
+        if arr[i - n][j] != 'T':
+            arr[i - n][j] = "H"
+        for x in reversed(range(1, n)):
+            if aniqla2([i - x, j]):
+                sum = sum + 1
+                arr[i - x][j] = "T"
+            else:
+                if first:
+                    if aniqla():
+                        sum = sum + 1
+                    arr[i - x][j] = "T"
+                    first = False
+                if arr[i - x][j] != 'T':
+                    arr[i - x][j] = "H"
+            # arr[i - n + x][j] = "T"
         T[0] = i - n + 1
         T[1] = j
+    return sum
 
 
-def D(i, j, n):
+def D(i, j, n, sum):
     first = True
     H[0] = i + n
     H[1] = j
-    if arr[i + n][j] != 'T':
-        arr[i + n][j] = "H"
-    for x in range(1, n):
-        if aniqla2([i + n - x, j]):
-            arr[i + n - x][j] = "T"
-        else:
-            if first:
-                arr[i + n - x][j] = "T"
-                first = False
-            if arr[i + n - x][j] != 'T':
-                arr[i + n - x][j] = "H"
-        # arr[i + n - x][j] = "T"
     if aniqla():
+        if arr[i + n][j] != 'T':
+            arr[i + n][j] = "H"
+        for x in reversed(range(1, n)):
+            if aniqla2([i + x, j]):
+                sum = sum + 1
+                arr[i + x][j] = "T"
+            else:
+                if first:
+                    if aniqla():
+                        sum = sum + 1
+                    arr[i + x][j] = "T"
+                    first = False
+                if arr[i + x][j] != 'T':
+                    arr[i + x][j] = "H"
+            # arr[i + n - x][j] = "T"
         T[0] = i + n - 1
         T[1] = j
+    return sum
 
 
 ii = 0
+sum = 0
 for x in f:
     x = x.replace('\n', '')
     a = x.split(' ')
     print(ii, x)
+    # if int(a[1]) > 1:
+    #     ii = ii + 1
     if a[0] == 'L':
-        L(H[0], H[1], int(a[1]))
+        sum = L(H[0], H[1], int(a[1]), sum)
     if a[0] == 'R':
-        R(H[0], H[1], int(a[1]))
+        sum = R(H[0], H[1], int(a[1]), sum)
     if a[0] == 'U':
-        U(H[0], H[1], int(a[1]))
+        sum = U(H[0], H[1], int(a[1]), sum)
     if a[0] == 'D':
-        D(H[0], H[1], int(a[1]))
+        sum = D(H[0], H[1], int(a[1]), sum)
 
 # print(R(s[0], s[1], 4))
 print(np.array(arr))
@@ -152,5 +174,6 @@ for i in range(0, size):
         if arr[i][j] == 'T':
             arr[i][j] = '#'
             natija = natija + 1
-print(natija+1)
+print(natija)
+print(sum)
 print(np.array(arr))
