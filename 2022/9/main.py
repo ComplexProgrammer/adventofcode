@@ -3,7 +3,7 @@ import numpy as np
 f = open(r"text0.txt", "r")
 i = 0
 j = 0
-size = 25
+size = 10
 s = [int(size / 2) - 1, int(size / 2) - 1]
 H = [int(size / 2) - 1, int(size / 2) - 1]
 T = [int(size / 2) - 1, int(size / 2) - 1]
@@ -38,104 +38,6 @@ def aniqla2(H):
         return True
 
 
-def L(i, j, n, sum):
-    first = True
-    H[0] = i
-    H[1] = j - n
-    if aniqla():
-        if arr[i][j - n] != 'T':
-            arr[i][j - n] = "H"
-        for x in reversed(range(1, n)):
-            if aniqla2([i, j - x]):
-                sum = sum + 1
-                arr[i][j - x] = "T"
-            else:
-                if first:
-                    sum = sum + 1
-                    arr[i][j - x] = "T"
-                    first = False
-                if arr[i][j - x] != "T":
-                    arr[i][j - x] = "H"
-            # arr[i][j - n + x] = "T"
-        T[0] = i
-        T[1] = j - n + 1
-    return sum
-
-
-def R(i, j, n, sum):
-    first = True
-    H[0] = i
-    H[1] = j + n
-    if aniqla():
-        if arr[i][j + n] != 'T':
-            arr[i][j + n] = "H"
-        for x in reversed(range(1, n)):
-            # arr[i][j + x] = "T"
-            if aniqla2([i, j + x]):
-                sum = sum + 1
-                arr[i][j + x] = "T"
-
-            else:
-                if first:
-                    sum = sum + 1
-                    arr[i][j + x] = "T"
-                    first = False
-                if arr[i][j + x] != 'T':
-                    arr[i][j + x] = "H"
-            # arr[i][j + n - x] = "T"
-        T[0] = i
-        T[1] = j + n - 1
-    return sum
-
-
-def U(i, j, n, sum):
-    first = True
-    H[0] = i - n
-    H[1] = j
-    if aniqla():
-        if arr[i - n][j] != 'T':
-            arr[i - n][j] = "H"
-        for x in reversed(range(1, n)):
-            if aniqla2([i - x, j]):
-                sum = sum + 1
-                arr[i - x][j] = "T"
-            else:
-                if first:
-                    sum = sum + 1
-                    arr[i - x][j] = "T"
-                    first = False
-                if arr[i - x][j] != 'T':
-                    arr[i - x][j] = "H"
-            # arr[i - n + x][j] = "T"
-        T[0] = i - n + 1
-        T[1] = j
-    return sum
-
-
-def D(i, j, n, sum):
-    first = True
-    H[0] = i + n
-    H[1] = j
-    if aniqla():
-        if arr[i + n][j] != 'T':
-            arr[i + n][j] = "H"
-        for x in reversed(range(1, n)):
-            if aniqla2([i + x, j]):
-                sum = sum + 1
-                arr[i + x][j] = "T"
-            else:
-                if first:
-                    sum = sum + 1
-                    arr[i + x][j] = "T"
-                    first = False
-                if arr[i + x][j] != 'T':
-                    arr[i + x][j] = "H"
-            # arr[i + n - x][j] = "T"
-        T[0] = i + n - 1
-        T[1] = j
-    return sum
-
-
 ii = 0
 sum = 0
 str = ""
@@ -147,6 +49,7 @@ count = 0
 res = ""
 str1 = ""
 lists = []
+step = 1
 for x in f:
     x = x.replace('\n', '')
     a = x.split(' ')
@@ -156,50 +59,43 @@ for x in f:
     if a[0] == 'L':
         for i in range(0, int(a[1])):
             column = column - 1
-            if tailColumn-column == 9:
+            if tailColumn-column > step:
                 tailRow = row
-                tailColumn = column+1
-                res = " " + tailColumn.__str__() + tailRow.__str__()
-                lists.append(res)
+                tailColumn = column+step
             if arr[row][column] != "T":
                 arr[row][column] = "H"
-            arr[tailRow][tailColumn] = "T"
+            arr[tailRow][tailColumn] = step - i
         # sum = L(H[0], H[1], int(a[1]), sum)
     if a[0] == 'R':
         for i in range(0, int(a[1])):
             column = column + 1
-            if column-tailColumn > 9:
+            if column-tailColumn > step:
                 tailRow = row
-                tailColumn = column-1
-                res = " " + tailColumn.__str__() + tailRow.__str__()
-                lists.append(res)
+                tailColumn = column-step
+                arr[tailRow][tailColumn] = i
             if arr[row][column] != "T":
                 arr[row][column] = "H"
-            arr[tailRow][tailColumn] = "T"
         # sum = R(H[0], H[1], int(a[1]), sum)
     if a[0] == 'U':
         for i in range(0, int(a[1])):
             row = row - 1
-            if tailRow-row > 9:
-                tailRow = row+1
+            if tailRow-row > step:
+                tailRow = row + step
                 tailColumn = column
-                res = " " + tailColumn.__str__() + tailRow.__str__()
-                lists.append(res)
+                arr[tailRow][tailColumn] = int(a[1]) - i
             if arr[row][column] != "T":
                 arr[row][column] = "H"
-            arr[tailRow][tailColumn] = "T"
         # sum = U(H[0], H[1], int(a[1]), sum)
     if a[0] == 'D':
         for i in range(0, int(a[1])):
             row = row + 1
-            if row - tailRow == 9:
-                tailRow = row-1
+            if row - tailRow > step:
+                tailRow = row-step
                 tailColumn = column
-                res = " " + tailColumn.__str__() + tailRow.__str__()
-                lists.append(res)
+                arr[tailRow][tailColumn] = int(a[1]) - i
             if arr[row][column] != "T":
                 arr[row][column] = "H"
-            arr[tailRow][tailColumn] = "T"
+            # arr[tailRow][tailColumn] = "T"
         # sum = D(H[0], H[1], int(a[1]), sum)
     res = ""
 # print(R(s[0], s[1], 4))
@@ -212,15 +108,20 @@ content = arr.__str__()
 file.write(content)
 file.close()
 natija = 0
+# print(np.array(arr))
+text = ''
 for i in range(0, size):
     for j in range(0, size):
-        if arr[i][j] == 'H':
-            arr[i][j] = '.'
-        if arr[i][j] == 'T':
-            arr[i][j] = '#'
-            natija = natija + 1
+        # if arr[i][j] == 'H':
+        #     arr[i][j] = '.'
+        # if arr[i][j] == 'T':
+        #     arr[i][j] = '#'
+        #     natija = natija + 1
+        text = text + arr[i][j].__str__()
+    print(text)
+    text = ''
 
 # print(arr)
-print(sum)
-print(natija)
-print(np.array(arr))
+# print(sum)
+# print(natija)
+# print(np.array(arr))
