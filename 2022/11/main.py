@@ -53,7 +53,7 @@ print('false', false)
 new = ''
 r = []
 result = 0
-for i in range(20):
+for i in range(1):
     for m in Monkey:
         for o in Starting[int(m)]:
             new = Operation[int(m)].replace('new = ', '').replace('old', o)
@@ -67,23 +67,22 @@ for i in range(20):
                 result = int(r[0]) - int(r[2])
             if r[1] == '+':
                 result = int(r[0]) + int(r[2])
-            # print(m, new + ' = ' + result.__str__(), int(result / 3), Test[int(m)], true[int(m)], false[int(m)])
-            # print('Starting', Starting, arr2, int(result / 3) / int(Test[int(m)]))
-            if int(result / 3) / int(Test[int(m)]) - int(int(result / 3) / int(Test[int(m)])) == 0.0:
+            rr = int(result / 3)
+            print(m, new + ' = ' + result.__str__(), int(result / 3), rr, Test[int(m)], true[int(m)], false[int(m)])
+            print('Starting', Starting, arr2, rr)
+            if rr / int(Test[int(m)]) - int(rr / int(Test[int(m)])) == 0.0:
                 # print(result / int(Test[int(m)]) - int(result / int(Test[int(m)])))
-                Starting[int(true[int(m)])].append(int(result / 3).__str__())
+                Starting[int(true[int(m)])].append(rr.__str__())
                 # print(True)
             else:
-                Starting[int(false[int(m)])].append(int(result / 3).__str__())
+                Starting[int(false[int(m)])].append(rr.__str__())
             arr2[int(m)] = np.array(Starting[int(m)]).size
-            # print('Starting', Starting, arr2)
-    # print('Starting', Starting)
+            print('Starting', Starting, arr2)
+    print('Starting', Starting)
     for s in range(len(Starting)):
-        # print(s, arr[s], arr2[s], Starting[s])
-        for a in range(0, arr2[s]):
-            if np.array(Starting[s]).size > 0:
-                # arr[int(s)] = arr[int(s)] + 1
-                Starting[s].pop(0)
+        print(s, arr[s], arr2[s], Starting[s])
+        Starting[s] = Starting[s][int(arr2[s]):]
+        # print(Starting[s], arr2[s])
     print('Starting', Starting, i+1)
 print('arr', arr)
 print('arr2', arr2)
